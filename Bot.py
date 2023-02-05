@@ -211,6 +211,7 @@ class CBot:
                             err_loc = 'edit_order sell'
                             params = {
                                 'order_id': open_ord['order_id'],
+                                'amount'  : open_ord['amount'],
                                 'price'   : fs_data['ask'] - 0.5
                             }
                             self.logger.info(params)
@@ -220,6 +221,7 @@ class CBot:
                             err_loc = 'edit_order buy'
                             params = {
                                 'order_id': open_ord['order_id'],
+                                'amount'  : open_ord['amount'],
                                 'price'   : fs_data['bid'] + 0.5
                             }
                             await self.exchange.edit_order(websocket, params)
