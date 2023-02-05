@@ -164,6 +164,8 @@ class CBot:
         while self.keep_alive:
             async with websockets.connect(self.exchange.url) as websocket:
                 try:
+                    await self.exchange.auth(websocket, self.__credentials)
+                    
                     err_loc = 'get_account_summary'
                     res = await self.exchange.get_account_summary(websocket, currency=self.currency)
                     self.equity = float(res['equity'])
