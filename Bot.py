@@ -125,13 +125,24 @@ class CBot:
 
                         data = message['data']
 
-                        if 'instrument_name' in data:
-                            self.fs_data[data['instrument_name']].update({
-                                'bid': data['implied_bid'], # best_bid_price
-                                'ask': data['implied_ask']  # best_ask_price
-                            })
-                        else:
+                        if 'instrument_name' not in data:
                             self.fs_data[index_name] = data['price']
+
+                        else:
+                            new_data = {}
+                            if data['instrument_name'] == instrument:
+                                new_data = {
+                                    'bid': data['implied_bid'], # best_bid_price
+                                    'ask': data['implied_ask']  # best_ask_price
+                                }
+                            elif data['instrument_name'] == index_name:
+                                new_data = {
+                                    'bid': data['best_bid_price'], # best_bid_price
+                                    'ask': data['best_ask_price']  # best_ask_price
+                                }
+
+                            self.fs_data[data['instrument_name']].update(new_data)
+
 
                     else:
                         self.logger.info('Data not updated > ')
