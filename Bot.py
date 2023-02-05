@@ -246,7 +246,7 @@ class CBot:
         tasks = []
 
         tasks.append(asyncio.create_task(self.fetch_fspread_data()))
-        tasks.append(asyncio.create_task(self.trade_fs()))
+        tasks.append(asyncio.create_task(self.trade_fs(self.interval)))
         tasks.append(asyncio.create_task(self.end_of_day()))
 
         self.logger.info(f'Tasks started...')
