@@ -224,7 +224,7 @@ class CBot:
             await asyncio.sleep(delay)
 
     def get_next_friday(self):
-        today = date.today()
+        today = datetime.now(timezone.utc) # date.today()
         td_weekday = today.weekday()
         if td_weekday != 4:
             today += timedelta( (4-td_weekday) % 7 )
