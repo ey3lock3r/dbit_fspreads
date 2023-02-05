@@ -251,7 +251,7 @@ class CBot:
 
         self.logger.info(f'Tasks started...')
 
-        await asyncio.gather(**tasks)
+        await asyncio.gather(*tasks)
 
         self.logger.info('Tasks ended!')
 
