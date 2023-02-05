@@ -156,15 +156,13 @@ class CBot:
 
     async def trade_fs(self, delay: int = 0):
         self.logger.info('trade_fs')
+        await asyncio.sleep(delay)
 
         fs_data = self.fs_data[self.instrument]
         err_loc = ''
+
         while self.keep_alive:
-            
-            await asyncio.sleep(delay)
-
             async with websockets.connect(self.exchange.url) as websocket:
-
                 try:
                     err_loc = 'get_account_summary'
                     res = await self.exchange.get_account_summary(websocket, currency=self.currency)
@@ -222,6 +220,8 @@ class CBot:
                 
                 except Exception as E:
                     self.logger.info(f'Error in trade_fs: {err_loc} : {E}') 
+
+            await asyncio.sleep(delay)
 
     def get_next_friday(self):
         today = date.today()
