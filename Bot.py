@@ -127,8 +127,8 @@ class CBot:
 
                         if 'instrument_name' in data:
                             self.fs_data[data['instrument_name']].update({
-                                'bid': data['best_bid_price'],
-                                'ask': data['best_ask_price']
+                                'bid': data['implied_bid'], # best_bid_price
+                                'ask': data['implied_ask']  # best_ask_price
                             })
                         else:
                             self.fs_data[index_name] = data['price']
@@ -178,7 +178,7 @@ class CBot:
                     params = {
                         'instrument_name' : self.instrument,
                         'type'            : 'limit',
-                        'price'           : fs_data['ask'] - 0.5,
+                        'price'           : fs_data['ask'], # - 0.5,
                         'amount'          : ord_size,
                         'post_only'       : True,
                         'max_show'        : 0
@@ -188,12 +188,13 @@ class CBot:
                         err_loc = 'create_order sell'
                         self.logger.info(f'Selling {ord_size} amount of {self.instrument} at {fs_data["ask"] - 1}')
                         self.ord_size = ord_size
+                        self.sell_price = params['ask']
                         await self.exchange.create_order(websocket, 'sell', params)
 
-                    if open_pos and not open_ord:
+                    if open_pos and not open_ord and fs_data['bid'] < self.sell_price - 5:
                         err_loc = 'create_order buy'
                         params.update({
-                            'price' : fs_data['bid'] + 0.5,
+                            'price' : fs_data['bid'], # + 0.5,
                             'amount': self.ord_size,
                             'reduce_only': True
                         })
@@ -209,16 +210,17 @@ class CBot:
                             params = {
                                 'order_id': open_ord['order_id'],
                                 'amount'  : open_ord['amount'],
-                                'price'   : fs_data['ask'] - 0.5
+                                'price'   : fs_data['ask'] #- 0.5
                             }
+                            self.sell_price = params['price']
                             await self.exchange.edit_order(websocket, params)
 
-                        if open_ord['direction'] == 'buy' and fs_data['bid'] != open_ord['price']:
+                        if open_ord['direction'] == 'buy' and fs_data['bid'] != open_ord['price'] and fs_data['bid'] < self.sell_price - 5:
                             err_loc = 'edit_order buy'
                             params = {
                                 'order_id': open_ord['order_id'],
                                 'amount'  : open_ord['amount'],
-                                'price'   : fs_data['bid'] + 0.5
+                                'price'   : fs_data['bid'] #+ 0.5
                             }
                             await self.exchange.edit_order(websocket, params)
                 
