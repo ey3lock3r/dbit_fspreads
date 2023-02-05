@@ -150,8 +150,11 @@ class CBot:
     
     def get_ord_size(self):
         ord_size = self.equity * self.risk_perc
+        self.logger.info(f'ord_size {ord_size} = equity {self.equity} * risk perc {self.risk_perc}')
         ord_size /= self.margin / 2 # 0.03? margin 2? pm acct
+        self.logger.info(f'ord_size 1 = {ord_size}')
         ord_size *= self.fs_data[self.index_name]
+        self.logger.info(f'ord_size 2 = {ord_size}')
         return ord_size - ord_size % 10
 
     async def trade_fs(self, delay: int = 0):
@@ -165,7 +168,7 @@ class CBot:
             async with websockets.connect(self.exchange.url) as websocket:
                 try:
                     await self.exchange.auth(websocket, self.__credentials)
-                    
+
                     err_loc = 'get_account_summary'
                     res = await self.exchange.get_account_summary(websocket, currency=self.currency)
                     self.equity = float(res['equity'])
