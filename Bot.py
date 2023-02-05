@@ -64,7 +64,7 @@ class CBot:
         fsdate = self.get_next_friday()
         params = {
             'trades': [{
-                'instrument_name': f'BTC-{self.fsdate}',
+                'instrument_name': f'BTC-{fsdate}',
                 'amount'         : 1,
                 'direction'      : 'sell'
             },
