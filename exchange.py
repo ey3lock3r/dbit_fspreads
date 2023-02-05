@@ -171,6 +171,17 @@ class Deribit_Exchange:
 
         return self.get_response_result(await ws.recv(), raise_error = raise_error)
 
+    async def edit_order(self, ws, params: dict = {}, raise_error: bool = True):
+
+        await ws.send(
+            self.create_message(
+                f'private/edit',
+                { **params }
+            )
+        )
+
+        return self.get_response_result(await ws.recv(), raise_error = raise_error)
+
     async def cancel_all(self, ws, raise_error: bool = True):
 
         await ws.send(
