@@ -1,0 +1,59 @@
+env: 'prod'
+
+bot:
+  interval: 5 # in seconds
+  currency: 'BTC'
+  risk_perc: 0.6
+  mtype: 'pm'
+  im:
+    pm: 0.0312
+    sm: 0.0204
+
+  auth:
+    test:
+      grant_type: 'client_credentials'
+      client_id: 'PLwAFl71'
+      client_secret: 'fyUfohnmLn9G0vlnPVOMsDFBIWTdsacl7hDF-pzRWl8'
+    prod:
+      grant_type: 'client_credentials'
+
+exchange:
+  url:
+    test: wss://test.deribit.com/ws/api/v2
+    prod: wss://www.deribit.com/ws/api/v2
+
+
+
+# See settings from module logging
+# https://docs.python.org/3/library/logging.config.html
+logging:
+  version: 1
+  
+  formatters:
+    simple:
+      format: '%(asctime)s %(name)s [%(levelname)s]: %(message)s'
+    csv:
+      format: '%(asctime)s,%(message)s'
+      datefmt: '%Y-%m-%d %H:%M:%S'
+
+  handlers:
+    console:
+      # class: 'logging.StreamHandler'
+      class: 'logging.handlers.TimedRotatingFileHandler'
+      level: 'DEBUG'
+      formatter: 'simple'
+      filename: 'output_log'
+      when: 'midnight'
+      # stream: 'ext://sys.stdout'
+    file:
+      class: 'logging.handlers.TimedRotatingFileHandler'
+      level: 'FILE'
+      formatter: 'csv'
+      filename: 'bot_log'
+      when: 'midnight'
+      # interval: 2
+      # suffix: '%y-%m-%d_%H_%M_bot_log.csv'
+
+  root:
+    level: 'INFO'
+    handlers: [console,file]
