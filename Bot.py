@@ -213,6 +213,7 @@ class CBot:
                                 'order_id': open_ord['order_id'],
                                 'price'   : fs_data['ask'] - 0.5
                             }
+                            self.logger.info(params)
                             await self.exchange.edit_order(websocket, params)
 
                         if open_ord['direction'] == 'buy' and fs_data['bid'] != open_ord['price']:
