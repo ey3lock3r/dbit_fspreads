@@ -151,7 +151,7 @@ class CBot:
     def get_ord_size(self):
         ord_size = self.equity * self.risk_perc
         self.logger.info(f'ord_size {ord_size} = equity {self.equity} * risk perc {self.risk_perc}')
-        ord_size /= self.margin / 2 # 0.03? margin 2? pm acct
+        ord_size = ord_size / self.margin / 2 # 0.03? margin 2? pm acct
         self.logger.info(f'ord_size 1 = {ord_size}')
         ord_size *= self.fs_data[self.index_name]
         self.logger.info(f'ord_size 2 = {ord_size}')
